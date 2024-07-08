@@ -1,5 +1,6 @@
 # MQTT_Chat
 Vue.jsとHTMLを用いたチャットアプリケーション
+![chat_kansei](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/1010d2df-ebcd-4281-8bc0-375c01e0e917)
 
 # 目標
 - MQTTの特徴の一つである **「多対多の通信」** を利用したチャットアプリケーションを作成すること．
@@ -11,25 +12,23 @@ Vue.jsとHTMLを用いたチャットアプリケーション
 
 - Publisherはトピック名を指定してメッセージを送信し，Subscriberは購読したいトピック名を指定することで，該当するメッセージのみを受け取ることができる．
 
-![](/実習ゼミ/第6回_mqtt/1_mqtt_setumei.png =800x)
+![1_mqtt_setumei](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/89df1c6c-561a-4a72-8cfd-3cd6a1602ee0)
 
 - 例えば，上側のSubscriberがtopicAを購読し，下側のSubscriberがtopicAとtopicBを購読しているとき，PublisherがtopicAを指定してメッセージを送信すると，**両方のSubscriberがメッセージを受け取る**．また，PublisherがtopicBを指定してメッセージを送信すると，下**側のSubscriberのみがメッセージを受け取る**．
-
 
 #  MQTT を用いたチャットアプリケーション作成
 メッセージをpublishする入力フォームと，自分も含む誰かが送信したメッセージを受け取るsubscribeの機能を作り，ブラウザで動作することを目標とする．
 
-> Note: 以降の作業では個人PCを用いるため必ずZoneCのWi-Fiに繋いでおくこと．
-{.is-warning}
-
+> [!WARNING]
+> Note: 以降の作業では個人PCを用いるため必ず同ネットワークに繋いでおくこと．
 
 ## 実施内容
 - （前提）MQTT Brokerをインストール
-:one: **ローカルで動作確認**
-:two: **Webデザインの改善**
-:three: **プライベートチャット（一対一）の実装**
-:four: **グループチャット（多対多）の実装**
-:five: **発展**
+1.  **ローカルで動作確認**
+2.  **Webデザインの改善**
+3.  **プライベートチャット（一対一）の実装**
+4.  **グループチャット（多対多）の実装**
+5.  **発展**
 
 # シンプルなチャットアプリケーション
 ## MQTT Broker をインストール
@@ -40,7 +39,7 @@ Vue.jsとHTMLを用いたチャットアプリケーション
 - HiveMQ　　　など
 
 今回は，高性能でスケーラブルなMQTT Brokerとして知られている`EMQX`を使用する．
-従って，[Install EMQX on Ubuntu](https://emqx.io/docs/en/latest/deploy/install-ubuntu.html#amd64)の`Install with Apt Source`の手順通りに以下のコマンドをラズパイで実行する．
+従って，[Install EMQX on Ubuntu](https://emqx.io/docs/en/latest/deploy/install-ubuntu.html#amd64)の`Install with Apt Source`の手順通りに以下のコマンドをラズパイ(Ubuntu 22.04 LTS)で実行する．
 1. EMQXのリポジトリをダウンロード（少し時間がかかります）
 ```
 curl -s https://assets.emqx.com/scripts/install-emqx-deb.sh | sudo bash
@@ -54,17 +53,20 @@ sudo apt-get install emqx
 sudo systemctl start emqx
 ```
 
-これにより，ラズパイでEMQXが立ち上げられる．正しくインストール出来ているか確認するために，個人PCのブラウザで`http://10.20.22.XXX:18083/`にアクセスする．
-> `XXX`は自分のラズパイに割り当てられたIPアドレス（不明な人は`ifconfig`で確認）{.is-info}
+これにより，ラズパイでEMQXが立ち上げられる．正しくインストール出来ているか確認するために，個人PCのブラウザで`http://XXX.XXX.XXX.XXX:18083/`にアクセスする．
+> [!NOTE]
+> `XXX.XXX.XXX.XXX`はEMQXをインストールした端末に割り当てられたIPアドレス
 
-![](/実習ゼミ/第6回_mqtt/3_emqx_setup.png)
+![3_emqx_setup](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/aa747d8b-0c97-454c-a079-56339e31833c)
 
 初期ユーザ名と初期パスワードを求められるため，以下のように入力する．
 - Username：**admin**
 - Password：**public**
-> Note: `Change Password`で初期パスワードを変更するよう言われるが，`Skip`でもok{.is-warning}
 
-![](/実習ゼミ/第6回_mqtt/3_emqx_setup_complete.png)
+> [!WARNING]
+> Note: `Change Password`で初期パスワードを変更するよう言われるが，`Skip`でもok
+
+![3_emqx_setup_complete](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/35fb30c4-5158-4aaa-b3a9-e7f3734f3b37)
 
 この画面のようになればEMQXのインストールは完了．
 ## MQTT Client の準備
@@ -76,13 +78,14 @@ sudo systemctl start emqx
 
 **MQTT over WebSocket**は，MQTTをWebSocketを使って行う技術である．これにより，ウェブブラウザや他のWebSocketをサポートするクライアントから直接，MQTTメッセージを送受信することが可能になる．
 
-> JavaScript版Pahoを利用するには，MQTT BrokerがMQTT over WebSocketに対応している必要がある．{.is-info}
+> [!NOTE]
+> JavaScript版Pahoを利用するには，MQTT BrokerがMQTT over WebSocketに対応している必要がある．
 
 ##  MQTT Broker との通信
 まず，pahoライブラリを使ってMQTT Brokerに接続するところ，メッセージを配信するところ，メッセージを受信するところを実装する．
 
 個人PCでテキストエディタを開き，以下のコードをコピペして`test.html`として保存する．
-```
+```html:test.html
 <html>
 
 <head>
