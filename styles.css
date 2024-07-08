@@ -1,0 +1,160 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.name {
+    position: fixed;
+    z-index: 1000;
+}
+
+.name-input {
+    border: none;
+    height: 30px;
+    outline: none;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.message-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-image: url("https://github.com/labnet-member/24-practice6-template/blob/main/kumo.png?raw=true");
+    border-bottom: 40px solid rgba(0, 0, 0, 0);
+}
+
+/* 左の吹き出し */
+.left_balloon {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+/* 右の吹き出し */
+.right_balloon {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+/* 吹き出しの入力部分の作成 */
+.baloon {
+    position: relative;
+    display: inline-block;
+    margin: 10px 20px;
+    padding: 10px 20px;
+    background: #ccffcc;
+    text-align: left;
+    border-radius: 12px;
+    word-wrap: break-word;
+    /* 課題➀ */
+    max-width: 900px;
+    
+}
+
+.baloon::after {
+    content: "";
+    border: 15px solid transparent;
+    border-top-color: #ccffcc;
+    position: absolute;
+    top: 10px;
+}
+
+/* 課題➁ */
+.left_balloon .baloon {
+    background: #fff;
+}
+
+
+.left_balloon .baloon::after {
+    left: -15px;
+    /* 課題➁ */
+    border-top-color: #fff;
+}
+
+.right_balloon .baloon::after {
+    right: -15px;
+}
+
+.input-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.message-input {
+    border: none;
+    height: 30px;
+    width: 80%;
+    outline: none;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.left_balloon .message {
+    align-items: flex-start;
+}
+
+.right_balloon .message {
+    align-items: flex-end;
+}
+
+.date-container {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.right_balloon .date-container {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.left_balloon .date-container {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.send-image-button {
+    white-space: nowrap;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    width: 20%;
+}
