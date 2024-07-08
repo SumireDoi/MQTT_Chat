@@ -771,11 +771,14 @@ MQTTを用いた多対多の通信も同様に，複数人が同じBroker，ト�
 
 先程紹介したGoogle Chromeの「検証」で吹き出し部分に対応する要素にどんなクラス名が割り当てられているか調べ，対応するCSSに吹き出しの最大幅を設定するCSSプロパティを設定しよう．
 
-<details><summary>ヒント</summary>
+<details>
+<summary>ヒント</summary>
+
 用いるCSSプロパティは以下の通り
-<code>
+
+```cs
 max-width: 900px;
-</code>
+```
 </details>
 
 ![8_ui_1](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/d77c930d-dbfb-4811-98ac-48efa3a97a0e)
@@ -788,56 +791,66 @@ max-width: 900px;
 
 そのため，「相手からのメッセージ部分に対応する要素」と「吹き出し用の三角形」の2つの要素に対して，白色にするCSSプログラムを設定する．
 
-<details><summary>ヒント</summary>
-用いるCSSプロパティは以下の通り<br>
-・ 相手からのメッセージ部分に対応する要素：<code>background: #fff;</code> <br>
-・ 吹き出し用の三角形：<code>border-top-color: #fff;</code>
+<details>
+<summary>ヒント</summary>
+
+用いるCSSプロパティは以下の通り
+
+・ 相手からのメッセージ部分に対応する要素：`background: #fff;`
+
+・ 吹き出し用の三角形：`border-top-color: #fff;`
+
 </details>
 
-![](/実習ゼミ/第6回_mqtt/8_ui_2.png)
+![8_ui_2](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/1abc4e2b-51fd-40d8-ad7f-cd5d0add17c0)
 
 ## 機能系
 ### 課題①：スタンプの実装（★★★）
 以下のように「スタンプを送信」ボタンを作成し，ボタンが押されたら画像を送信&表示するようにしよう．
 
-:one: htmlでボタンを作成
-:two: ↑で作成したhtmlタグは`id="image"`として，対応するVueを作成
-:three: Vueの中身はinputのものとほぼ同じだが，以下が異なっている
+1.  htmlでボタンを作成
+2.  ↑で作成したhtmlタグは`id="image"`として，対応するVueを作成
+3.  Vueの中身はinputのものとほぼ同じだが，以下が異なっている
 - 送信するメッセージが画像ならtrueになる変数`isImage`をmsgに新たに作成（それと同時に，今までのinputにも変数`isImage`をmsgに作成しておく）
-- `this.msg.c = "https://github.com/labnet-member/24-practice6-template/blob/main/dog_ok2.jpg?raw=true";`を追加
+- `this.msg.c = "画像のURL";`を追加
 
-:four: htmlのメッセージを表示する部分において，「message.isImage」がtrue/falseの場合で分岐させる
+4.  htmlのメッセージを表示する部分において，「message.isImage」がtrue/falseの場合で分岐させる
 - 「message.isImage」がtrueの場合
 `<span class="baloon">{{ message.c }}</span>`
 ↓
 `<img :src=message.c alt="Message Image" class="message-image" width="300" height="300">`
 に変更する．
 
-<details><summary>ヒント</summary>
+<details>
+<summary>ヒント</summary>
+
 ・ ボタンの作成：<code>&lt;button&gt; @click="sendImage" id="image" class="send-image-button">スタンプを送信&lt;/button&gt;</code> <br>
 </details>
 
-![](/実習ゼミ/第6回_mqtt/8_kinou_1.png)
+![8_kinou_1](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/9f448931-4dec-4579-b12b-a5d5941ae27f)
 
 ### 課題②：特定のキーワードによる隠し演出の実装（★★☆）
 メッセージ（自分から／相手からの両方）に「夏」という文字が含まれていたら背景を変え，3秒後に元に戻すように変更しよう．
 
-<details><summary>ヒント</summary>
+<details>
+<summary>ヒント</summary>
+
 メッセージを受け取る関数内で，受け取ったメッセージに「夏」が含まれていたら以下のchangeBackground関数を呼び出してやればよい．<br>
-<code>
-function changeBackground() { <br>
-&nbsp;&nbsp;var url_k = "https://github.com/labnet-member/24-practice6-template/blob/main/kumo.png?raw=true"; <br>
-&nbsp;&nbsp;var url_s = "https://github.com/labnet-member/24-practice6-template/blob/main/summer.jpg?raw=true";<br>
-&nbsp;&nbsp;var div = document.getElementById("msgView");<br>
-&nbsp;&nbsp;div.style.backgroundImage = `url(${url_s})`;<br>
-&nbsp;&nbsp;setTimeout(() => {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;div.style.backgroundImage = `url(${url_k})`;<br>
-&nbsp;&nbsp;}, 3000);<br>
-}<br>
-</code>
+
+```js
+function changeBackground() {
+	var url_k = "雲の画像のURL";
+	var url_s = "夏の画像のURL";
+	var div = document.getElementById("msgView");
+	div.style.backgroundImage = `url(${url_s})`;
+	setTimeout(() => {
+		div.style.backgroundImage = `url(${url_k})`;
+	}, 3000);
+}
+```
 </details>
 
-![](/実習ゼミ/第6回_mqtt/8_kinou_2.png)
+![8_kinou_2](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/215ab317-1c3e-4fcf-8c4d-356bb00d503e)
 
 これらの他にも，このアプリケーションにはまだまだたくさんの課題がある．時間が余った人は以下にも挑戦してみよう．
 - 画像付き吹き出しデザイン（★★☆）
