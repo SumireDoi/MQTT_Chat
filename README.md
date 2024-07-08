@@ -156,18 +156,19 @@ sudo systemctl start emqx
 
 保存したファイルをブラウザで開く．すると，真っ白な画面が出るがEMQXブローカにはちゃんとメッセージが送られている．それを確認するために，右クリックで`検証`を押し，`Console`タブを開く．
 
-![](/実習ゼミ/第6回_mqtt/3_paho_confirm.png)
+![3_paho_confirm](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/0699180c-dfa3-41f8-9e43-dfddc91f97d1)
 
+> [!TIP]
 > `onConnect`
 > `onMessageArrived:Hello`
-> と出ていればok{.is-success}
+> と出ていればok
 
 EMQXでも以下のようになっていることを確認する．
 
-![](/実習ゼミ/第6回_mqtt/3_paho_confirm_emqx.png)
+![3_paho_confirm_emqx](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/bbccc951-5dab-4837-ae13-d24877ada667)
 
 ### 小テスト１
-Consoleタブに`onMessageArrived:Hello`と表示されている部分が`onMessageArrived:Test1`になるよう変更し，変更を加えた`test.html`をフォームの回答に貼り付けてください．
+Consoleタブに`onMessageArrived:Hello`と表示されている部分が`onMessageArrived:Test1`になるよう変更してください．
 - <span style="color: red;">**Point**</span>: どこでpublish関数が呼び出されているか考える．
 
 ##  データと UI の結び付け
@@ -177,13 +178,13 @@ Consoleタブに`onMessageArrived:Hello`と表示されている部分が`onMess
 
 - 基本的な使い方
 - index.html
-```
+```html
 <div id="app">{{ message }}</div>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <script src="script.js"></script>
 ```
 - script.js
-```
+```js
 var app = new Vue({
     el: '#app',
     data: {
@@ -192,25 +193,25 @@ var app = new Vue({
 })
 ```
 - scriptの記述を解説
-```
+```js
 var app = new Vue({
 		…
 })
 ```
 ここでは`app`と命名したスクリプトは，Vueを実行することを宣言しており，new Vue({…})というVueクラスの中に，使用するデータや処理内容（メソッド）を定義する．
-```
+```js
 el: '#app',
 ```
 左側の文字列をプロパティ，右側の文字列を値と呼ぶ．
 `elプロパティ`は，右に記述した要素が《Vue.jsが動作する範囲であること》を表す．
 この場合，htmlからappと命名されたIDを探し，そのなかでVue.jsを動かすこと表す．
-```
+```js
 data: {
 		...
 }
 ```
 dataプロパティはVue.jsで扱うデータを記述する．また，データが変更されると，その変更内容が即時に画面に反映される．
-```
+```js
 message: 'Hello Vue!'
 ```
 messageという変数に，”Hello Vue!”という文字列を値として定義している．
@@ -223,9 +224,8 @@ inputのエンターを押した時点で，イベントを発火させ，メッ
 
 `test.html`を以下のように修正し，新たに`form.js`を作成し同じディレクトリ内に配置する．
 
-### Tab {.tabset}
-#### test.html
-```
+### test.html
+```html:test.html
 <html>
 
 <head>
@@ -316,8 +316,9 @@ inputのエンターを押した時点で，イベントを発火させ，メッ
 
 </html>
 ```
+
 #### form.js
-```
+```js:form.js
 var user = new Vue({
     el: '#user',
     data: {
@@ -385,12 +386,12 @@ var msgView = new Vue({
 ```
 ###
 - 名前入力フォーム
-```
+```html
 <div id="user" class="name">
 		<input v-model="uName">{{uName}}
 </div>
 ```
-```
+```js
 var user = new Vue({
     el: '#user',
     data: {
@@ -399,19 +400,19 @@ var user = new Vue({
 });
 ```
 ここでは`user`と命名したスクリプトは，Vueを実行することを宣言しており，new Vue({…})というVueクラスの中に，使用するデータや処理内容（メソッド）を定義する．
-```
+```js
 el: '#user',
 ```
 左側の文字列をプロパティ，右側の文字列を値と呼ぶ．
 `elプロパティ`は，右に記述した要素が《Vue.jsが動作する範囲であること》を表す．
 この場合，htmlからuserと命名されたIDを探し，そのなかでVue.jsを動かすこと表す．
-```
+```js
 data: {
 		...
 }
 ```
 dataプロパティはVue.jsで扱うデータを記述する．また，データが変更されると，その変更内容が即時に画面に反映される．
-```
+```js
 uName: 'なまえ'
 ```
 uNameという変数に，”なまえ”という文字列を値として定義している．
@@ -436,8 +437,8 @@ uNameという変数に，”なまえ”という文字列を値として定義
 clientID = '自分の名前'; // `test.html`の`clientID`と異なるように設定する．
 ```
 
+> [!WARNING]
 > Note: `clientID`が同じままだと正しく動作しないため必ず変更しておく．
-{.is-warning}
 
 `test.html`と`local.html`の両方をブラウザで開き，`test.html`の方で以下の動作を確認する．
 
@@ -447,12 +448,12 @@ clientID = '自分の名前'; // `test.html`の`clientID`と異なるように�
 早速自分の名前書いて，メッセージを入力しEnterを押してみよう．するとすぐに自分の名前と一緒にメッセージが表示されるはず．
 ここで，`local.html`を見ると`test.html`に表示されたメッセージと同じものが届いている．
 
-![](/実習ゼミ/第6回_mqtt/4_name_input.png =800x)
+![4_name_input](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/d2d0ebce-7500-45b9-9aa1-7ddb11a4d746)
 
-![](/実習ゼミ/第6回_mqtt/4_local_confirm.png =800x)
+![4_local_confirm](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/c93b1ae2-198b-4baa-9870-6479ab7806db)
 
+> [!NOTE]
 > メッセージを送信すると，EMQXは接続している全ての購読者にメッセージを配信する．ただ，今は自分の個人PCしか購読者になっていないためメッセージを受け取るのは自分自身のみ．（他の人にメッセージは送れない）
-{.is-info}
 
 # Webデザインの改善
 現状のチャットアプリケーションはシンプルすぎて味気が無いため，`HTML`と`CSS`を組み合わせて見た目を改善させる．
@@ -464,9 +465,8 @@ clientID = '自分の名前'; // `test.html`の`clientID`と異なるように�
 
 `test.html`を以下のように修正&新たに`styles.css`を作成し同じディレクトリ内に配置する．
 
-### Tab {.tabset}
 #### test.html
-```
+```html:test.html
 <!DOCTYPE html>
 <html>
 
@@ -566,8 +566,9 @@ clientID = '自分の名前'; // `test.html`の`clientID`と異なるように�
 
 </html>
 ```
+
 #### styles.css
-```
+```css:styles.css
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -708,11 +709,12 @@ body {
 
 そして`test.html`を再読み込みするとLINE風のチャットアプリケーションに見た目が変わり，メッセージ表示部分が吹き出しになる．
 
-![](/実習ゼミ/第6回_mqtt/5_local_complete.png =800x)
+![5_local_complete](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/0726b5ca-b594-46e4-8352-3936a4068604)
 
 以上でローカルでの動作確認が完了し，チャットアプリケーションを使っているという実感が湧いたはず．次は実際に他の人とチャットできるようにする．
 
 # プライベートチャット（一対一）の実装
+※研究室など複数のメンバーで実施する際は以下のトピック名を使ってみてください
 
 | グループ番号 | トピック名  |
 | ---------- | ---------- |
@@ -724,20 +726,21 @@ body {
 | 6 | Dog   |
 
 `test.html`の`clientID`，`topic`，`client`を以下のように修正する．
-```
+```html
 clientID = '自分の名前'; // 他の人と被らないようにすること
 topic = 'トピック名'; // 自分のグループ番号に対応したトピック名を使用すること
 
-// クライアントインスタンスを作成（今回は動作検証用のラズパイ）
-client = new Paho.MQTT.Client("emqx@10.20.22.242", 8083, clientID);
+// クライアントインスタンスを作成
+client = new Paho.MQTT.Client("emqx@XXX.XXX.XXX.XXX", 8083, clientID);
 ```
-![](/実習ゼミ/第6回_mqtt/6_private_setumei.png =800x)
+![6_private_setumei](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/e24d4299-ed2a-4401-aecf-6d0bd10d98e5)
 
 MQTTを用いた一対一の通信はかなり単純で，通信したい相手と同じBroker，トピック名を指定することで実現できる．
 
-![](/実習ゼミ/第6回_mqtt/6_private_confirm.png =800x)
+![6_private_confirm](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/f9d4777e-3f95-492f-a210-5a3535c275eb)
 
 # グループチャット（多対多）の実装
+※研究室など複数のメンバーで実施する際は以下のトピック名を使ってみてください
 
 | グループ番号 | トピック名  |
 | ---------- | ---------- |
@@ -745,22 +748,20 @@ MQTTを用いた一対一の通信はかなり単純で，通信したい相手�
 | 4，5，6 | Takoyaki |
 
 先程と同様に，`test.html`の`clientID`，`topic`，`client`を以下のように修正する．
-```
+```html
 clientID = '自分の名前'; // 他の人と被らないようにすること
 topic = 'トピック名'; // 自分のグループ番号に対応したトピック名を使用すること
 ```
 
-![](/実習ゼミ/第6回_mqtt/7_group_setumei.png)
+![7_group_setumei](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/def9acd4-8f28-45e1-ac41-aa18eb061d97)
 
 MQTTを用いた多対多の通信も同様に，複数人が同じBroker，トピック名を指定することで実現できる．
 
-![](/実習ゼミ/第6回_mqtt/7_group_confirm.png)
+![7_group_confirm](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/9f934f08-4021-4a13-9682-47f7e41882b2)
 
 ### 小テスト２
-多対多の通信をMQTTで行うにはどうすればよいでしょうか．考えた方法をフォームで回答してください．
+多対多の通信をMQTTで行うにはどうすればよいでしょうか．考えてみてください．
 - <span style="color: red;">**Point**</span>: 先程の図を多対多の通信にさせて考える．
-
-https://docs.google.com/forms/d/e/1FAIpQLScQbcN7dD76WkGGIcgfp1sKG6rTEAqy5CCO4Qt3qWOKuxWijQ/viewform?usp=sf_link
 
 ---
 # 発展
@@ -771,13 +772,13 @@ https://docs.google.com/forms/d/e/1FAIpQLScQbcN7dD76WkGGIcgfp1sKG6rTEAqy5CCO4Qt3
 先程紹介したGoogle Chromeの「検証」で吹き出し部分に対応する要素にどんなクラス名が割り当てられているか調べ，対応するCSSに吹き出しの最大幅を設定するCSSプロパティを設定しよう．
 
 <details><summary>ヒント</summary>
-用いるCSSプロパティは以下の通り<br>
+用いるCSSプロパティは以下の通り
 <code>
 max-width: 900px;
 </code>
 </details>
 
-![](/実習ゼミ/第6回_mqtt/8_ui_1.png =800x)
+![8_ui_1](https://github.com/SumireDoi/MQTT_Chat/assets/115055083/d77c930d-dbfb-4811-98ac-48efa3a97a0e)
 
 > 長い文章の入力例：[走れメロス 太宰治](https://www.aozora.gr.jp/cards/000035/files/1567_14913.html)
 
